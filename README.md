@@ -8,7 +8,7 @@ This project automates resume screening using a Deterministic Finite Automata (D
 
 ## Prerequisites
 - Python 3.8 or higher.
-- Basic knowledge of file structures and Python environment setup.
+- Python Interpreter
 
 ## Installation
 1. Clone this repository:
@@ -18,3 +18,9 @@ This project automates resume screening using a Deterministic Finite Automata (D
 2.  cd DFA-Resume-Screening
 
 3. pip install -r requirements.txt
+
+## Run the Script
+   - Navigate to the `src` folder where `main.py` is stored and run:
+     ```bash
+     python main.py
+     
