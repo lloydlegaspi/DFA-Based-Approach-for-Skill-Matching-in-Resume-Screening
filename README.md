@@ -8,6 +8,13 @@ Since this is only a prototype, limited features of the said project will be imp
 - **Multi-pattern Detection:** Handles multiple skill patterns efficiently.
 - **Output Reports:** Generates a list of matched and missing skills for each resume.
 
+
+## Limitations of the Prototype
+- Simple Matching Logic: The current DFA checks for word-level matches, meaning skills that are not exact word matches (e.g., "Pythonic" or "Microsoft Word") may be overlooked.
+- No Case Sensitivity Handling: The matching process assumes the case matches exactly (e.g., "python" will not match "Python").
+- Single-word Skills: Multi-word skills like "Computer Science" are treated as separate strings and need precise matching.
+
+
 ## Prerequisites using Python
 - Python 3.8 or higher.
 - Python Interpreter
