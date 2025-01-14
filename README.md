@@ -14,3 +14,7 @@ This project automates resume screening using a Deterministic Finite Automata (D
 1. Clone this repository:
    ```bash
    git clone <repo_url>
+   
+2.  cd DFA-Resume-Screening
+
+3. pip install -r requirements.txt
