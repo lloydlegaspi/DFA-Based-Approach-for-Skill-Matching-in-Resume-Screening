@@ -1,5 +1,5 @@
 import os
-import re
+# import re
 
 def build_dfa(skills):
     """
@@ -54,7 +54,7 @@ skills = ["Python", "C#", "DFA", "Automation", "String Matching"]
 dfa = build_dfa(skills)
 
 # Example directory of resumes (replace with your path)
-resume_dir = "./data/resumes/"
+resume_dir = "C:/Users/alix/Documents/DFA-Based-Approach-for-Skill-Matching-in-Resume-Screening/data/resumes/"
 resume_texts = extract_text_from_resumes(resume_dir)
 
 for idx, resume in enumerate(resume_texts, start=1):
