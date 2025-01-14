@@ -1,5 +1,4 @@
 import os
-# import re
 
 def build_dfa(skills):
     """
@@ -16,26 +15,23 @@ def build_dfa(skills):
         state['is_end'] = True  # Mark the end of a skill
     return dfa
 
-def check_skill(dfa, text):
+def check_skill(dfa, resume_text):
     """
     Check for the presence of skills in the given text using the DFA.
     """
     matches = []
-    missing = []
-    for skill in skills:
+    words = resume_text.split()
+    for word in words:
         state = dfa
-        found = True
-        for char in skill:
+        for char in word:
             if char in state:
                 state = state[char]
             else:
-                found = False
+                state = None
                 break
-        if found and 'is_end' in state:
-            matches.append(skill)
-        else:
-            missing.append(skill)
-    return matches, missing
+        if state and 'is_end' in state:
+            matches.append(word)
+    return matches
 
 def extract_text_from_resumes(resume_dir):
     """
@@ -49,9 +45,11 @@ def extract_text_from_resumes(resume_dir):
                 resume_texts.append(f.read())
     return resume_texts
 
-# Input list of required skills
-skills = ["Python", "C#", "DFA", "Automation", "String Matching"]
-dfa = build_dfa(skills)
+# Define the list of required skills
+required_skills = ['Python', 'C#', 'Microsoft', 'HTML', 'JavaScript', 'Computer Science']
+
+# Build the DFA from the required skills
+dfa = build_dfa(required_skills)
 
 # Example directory of resumes (replace with your path)
 resume_dir = "C:/Users/alix/Documents/DFA-Based-Approach-for-Skill-Matching-in-Resume-Screening/data/resumes/"
@@ -59,7 +57,9 @@ resume_texts = extract_text_from_resumes(resume_dir)
 
 for idx, resume in enumerate(resume_texts, start=1):
     print(f"Processing Resume {idx}:")
-    matched, missing = check_skill(dfa, resume)
+    matched = check_skill(dfa, resume)
+    missing = [skill for skill in required_skills if skill not in matched]
     print(f"  Matched Skills: {matched}")
     print(f"  Missing Skills: {missing}")
+    print(f"  Total Matched Skills: {len(matched)}")
     print("-" * 40)
