@@ -3,11 +3,13 @@ import streamlit as st
 from PyPDF2 import PdfReader
 import re
 
+# Function to clean text
 def clean_text(text):
     text = re.sub(r'[^a-zA-Z0-9\s]+', '', text)  # Remove non-alphanumeric characters
     text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces with one space
     return text.strip()
 
+# Function to build DFA
 def build_dfa(skills):
     dfa = {}
     for skill in skills:
@@ -21,6 +23,7 @@ def build_dfa(skills):
         state['is_end'] = True  # Mark the end of a skill
     return dfa
 
+# Function to check skills in resume text
 def check_skill(dfa, resume_text):
     matches = []
     words = resume_text.split()  # Split the resume text into words
@@ -43,6 +46,7 @@ def check_skill(dfa, resume_text):
                 break  # Stop at the first match to avoid partial overlap
     return matches
 
+# Function to extract text from PDF
 def extract_text_from_pdf(file):
     pdf = PdfReader(file)
     text = ""
@@ -52,38 +56,66 @@ def extract_text_from_pdf(file):
             text += page_text
     return clean_text(text)
 
-st.title("DFA-Based Skill Matching in Resume Screening")
+# Streamlit App
+st.title("Resume Skill Matcher")
+st.markdown("Upload a resume and enter the required skills to see if they match.")
 
-# Input required skills
-required_skills = st.text_area("Enter required skills (comma-separated):").lower().split(',')
+# Input Section
+st.subheader("Enter Required Skills")
+required_skills = st.text_area("Enter skills separated by commas (e.g., Python, Java, Machine Learning):").lower().split(',')
 required_skills = [skill.strip() for skill in required_skills if skill.strip()]
 
-# Display the list of inputted skills
-st.write("Inputted Skills:")
-st.write(required_skills)
+# Display inputted skills
+if required_skills:
+    st.write("**Inputted Skills:**")
+    st.write(required_skills)
 
-# Upload PDF files
-uploaded_files = st.file_uploader("Upload up to 3 PDF resumes (max 25MB each)", type="pdf", accept_multiple_files=True)
+# Upload Resume
+st.subheader("Upload Resume")
+uploaded_file = st.file_uploader("Upload a PDF resume (max 25MB)", type="pdf")
 
-if st.button("Process Resumes"):
-    if not required_skills or not uploaded_files:
-        st.error("Please provide required skills and upload resumes.")
+# Process Resume Button
+if st.button("Match Skills"):
+    if not required_skills or not uploaded_file:
+        st.error("Please provide required skills and upload a resume.")
     else:
-        dfa = build_dfa(required_skills)
-        for idx, uploaded_file in enumerate(uploaded_files, start=1):
-            if uploaded_file.size > 25 * 1024 * 1024:
-                st.error(f"File {uploaded_file.name} exceeds the 25MB limit.")
-                continue
-            resume_text = extract_text_from_pdf(uploaded_file).lower()
-            st.write(f"Extracted Text from Resume {idx}:")
-            st.write(resume_text)  # Debugging statement to check extracted text
-            matched = check_skill(dfa, resume_text)
-            matched = [skill for skill in required_skills if any(skill in match for match in matched)]
-            missing = [skill for skill in required_skills if skill not in matched]
-            st.write(f"Processing Resume {idx}:")
-            st.write(f"Total Matched Skills: {len(matched)}")
-            st.write("Matched Skills:")
-            st.write(matched)
-            st.write("Missing Skills:")
-            st.write(missing)
-            st.write("-" * 40)
+        if uploaded_file.size > 25 * 1024 * 1024:
+            st.error(f"File {uploaded_file.name} exceeds the 25MB limit.")
+        else:
+            with st.spinner("Processing resume..."):
+                resume_text = extract_text_from_pdf(uploaded_file).lower()
+                dfa = build_dfa(required_skills)
+                matched_skills = check_skill(dfa, resume_text)
+                matched = [skill for skill in required_skills if any(skill in match for match in matched_skills)]
+                missing = [skill for skill in required_skills if skill not in matched]
+
+                # Display Results
+                st.success("Processing complete!")
+                st.subheader("Results")
+
+                # Matched Skills
+                st.write("**Matched Skills:**")
+                if matched:
+                    for skill in matched:
+                        st.markdown(f"✅ {skill}")
+                else:
+                    st.write("No skills matched.")
+
+                # Missing Skills
+                st.write("**Missing Skills:**")
+                if missing:
+                    for skill in missing:
+                        st.markdown(f"❌ {skill}")
+                else:
+                    st.write("All skills matched!")
+
+                # Summary
+                st.subheader("Summary")
+                st.write(f"**{len(matched)} out of {len(required_skills)} skills matched.**")
+                progress = len(matched) / len(required_skills)
+                st.progress(progress)
+
+# Footer
+st.markdown("---")
+st.markdown("**Instructions:** Make sure to enter all required skills separated by commas.")
+st.markdown("**Contact:** support@resumematcher.com")
