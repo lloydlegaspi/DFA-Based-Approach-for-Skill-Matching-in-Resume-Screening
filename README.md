@@ -1,7 +1,7 @@
 ## DFA-Based-Approach-for-Skill-Matching-in-Resume-Screening
 This project automates resume screening using a Deterministic Finite Automata (DFA)-based skill-matching algorithm. This will be run using streamlit as we use python and easy for making this prototype
 
-Any lapses of the app/prototype can be improved as this prototype will only be served as a guide and visualization of the research
+Any lapses of the app/prototype can be improved as this prototype will only serve as a guide and visualization of the research
 
 
 ## Features
@@ -13,7 +13,6 @@ Any lapses of the app/prototype can be improved as this prototype will only be s
 
 ## Limitations of the Prototype
 - Simple Matching Logic: The current DFA checks for word-level matches, meaning skills that are not exact word matches (e.g., "Pythonic" or "Microsoft Word") may be overlooked.
-- No Case Sensitivity Handling: The matching process assumes the case matches exactly (e.g., "python" will not match "Python").
 - PDF Text extraction may not be accurate as spaces, white spaces and other invisible characters may be detected
 
 
