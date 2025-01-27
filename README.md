@@ -17,11 +17,6 @@ Any lapses of the app/prototype can be improved as this prototype will only serv
 
 
 
-## Running the web-app  using streamlit
-
-- cd "C:/Users/alix/Documents/DFA-Based-Approach-for-Skill-Matching-in-Resume-Screening/src/" (where the file directory is located)
-  
-
 ## Run the Script
    - Navigate to the `src` folder where `main.py` is stored and run:
      
