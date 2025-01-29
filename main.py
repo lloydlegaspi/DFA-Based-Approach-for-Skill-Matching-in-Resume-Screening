@@ -2,6 +2,7 @@ import os
 import streamlit as st
 from PyPDF2 import PdfReader
 import re
+from collections import deque, defaultdict
 
 # Function to clean text
 def clean_text(text):
@@ -9,42 +10,54 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces with one space
     return text.strip()
 
-# Function to build DFA
-def build_dfa(skills):
-    dfa = {}
+# Function to build Aho-Corasick DFA manually
+def build_aho_corasick(skills):
+    dfa = defaultdict(dict) # dic is is used to represent states and transitions (Trie)
+    output = {} # Stores the final matched patterns
+    failure = {} # Reference of required skills in a trie/tree
+    
+    # Construct trie for each required skills
     for skill in skills:
-        words = skill.strip().split()  # Handle multi-word skills
-        state = dfa
-        for word in words:
-            for char in word:
-                if char not in state:
-                    state[char] = {}
-                state = state[char]
-        state['is_end'] = True  # Mark the end of a skill
-    return dfa
+        state = ""
+        for char in skill:
+            if char not in dfa[state]: 
+                dfa[state][char] = state + char
+            state = dfa[state][char]
+        output[state] = skill # Final state
+    
+    # Go to function handles the transitions between states 
+    queue = deque()
+    for char, next_state in dfa[""].items():
+        failure[next_state] = ""
+        queue.append(next_state)
+    
+    # Failure function checks for longest suffix
+    while queue:
+        current_state = queue.popleft()
+        for char, next_state in dfa[current_state].items():
+            queue.append(next_state)
+            fail_state = failure[current_state]
+            while fail_state and char not in dfa[fail_state]:
+                fail_state = failure.get(fail_state, "")
+            failure[next_state] = dfa.get(fail_state, {}).get(char, "")
+            if failure[next_state] in output:
+                output[next_state] = output.get(next_state, '') or output[failure[next_state]]
+    
+    return dfa, failure, output
 
-# Function to check skills in resume text
-def check_skill(dfa, resume_text):
-    matches = []
-    words = resume_text.split()  # Split the resume text into words
-    for i in range(len(words)):
-        state = dfa
-        matched_skill = []
-        for j in range(i, len(words)):
-            word = words[j]
-            for char in word:
-                if char in state:
-                    state = state[char]
-                else:
-                    state = None
-                    break
-            if state is None:
-                break
-            matched_skill.append(word)
-            if 'is_end' in state:
-                matches.append(' '.join(matched_skill))
-                break  # Stop at the first match to avoid partial overlap
-    return matches
+# Output function to check skills in resume text
+def check_skills(dfa, failure, output, resume_text):
+    state = ""
+    matches = set()
+    
+    for char in resume_text:
+        while state and char not in dfa[state]:
+            state = failure.get(state, "")
+        state = dfa.get(state, {}).get(char, "")
+        if state in output:
+            matches.add(output[state])
+    
+    return list(matches)
 
 # Function to extract text from PDF
 def extract_text_from_pdf(file):
@@ -57,7 +70,7 @@ def extract_text_from_pdf(file):
     return clean_text(text)
 
 # Streamlit App
-st.title("Resume Skill Matcher")
+st.title("Resume Skill Matcher - DFA-based Aho-Corasick")
 st.markdown("Upload a resume and enter the required skills to see if they match.")
 
 # Input Section
@@ -84,10 +97,9 @@ if st.button("Match Skills"):
         else:
             with st.spinner("Processing resume..."):
                 resume_text = extract_text_from_pdf(uploaded_file).lower()
-                dfa = build_dfa(required_skills)
-                matched_skills = check_skill(dfa, resume_text)
-                matched = [skill for skill in required_skills if any(skill in match for match in matched_skills)]
-                missing = [skill for skill in required_skills if skill not in matched]
+                dfa, failure, output = build_aho_corasick(required_skills)
+                matched_skills = check_skills(dfa, failure, output, resume_text)
+                missing_skills = [skill for skill in required_skills if skill not in matched_skills]
 
                 # Display Results
                 st.success("Processing complete!")
@@ -95,24 +107,24 @@ if st.button("Match Skills"):
 
                 # Matched Skills
                 st.write("**Matched Skills:**")
-                if matched:
-                    for skill in matched:
+                if matched_skills:
+                    for skill in matched_skills:
                         st.markdown(f"✅ {skill}")
                 else:
                     st.write("No skills matched.")
 
                 # Missing Skills
                 st.write("**Missing Skills:**")
-                if missing:
-                    for skill in missing:
+                if missing_skills:
+                    for skill in missing_skills:
                         st.markdown(f"❌ {skill}")
                 else:
                     st.write("All skills matched!")
 
                 # Summary
                 st.subheader("Summary")
-                st.write(f"**{len(matched)} out of {len(required_skills)} skills matched.**")
-                progress = len(matched) / len(required_skills)
+                st.write(f"**{len(matched_skills)} out of {len(required_skills)} skills matched.**")
+                progress = len(matched_skills) / len(required_skills) if required_skills else 0
                 st.progress(progress)
 
 # Footer
