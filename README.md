@@ -1,5 +1,5 @@
 ## DFA-Based-Approach-for-Skill-Matching-in-Resume-Screening
-This project automates resume screening using a Deterministic Finite Automata (DFA)-based skill-matching algorithm. This will be run using streamlit as we use python and easy to make this prototype
+This project automates resume screening using a Deterministic Finite Automata (DFA)-based skill-matching algorithm. This will be run using streamlit as we use python 
 
 Any lapses in the app/prototype can be improved as this prototype will only serve as a guide and visualization of the research
 
