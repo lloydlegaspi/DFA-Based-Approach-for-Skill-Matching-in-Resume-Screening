@@ -10,7 +10,7 @@ The goal of this prototype is to visualize and demonstrate the practical applica
 - [🧩 Features](#features)
 - [📸 Screenshots](#screenshots)
 - [⚙️ Installation](#installation)
-- [🖥️ Run Locally](#run-locally)
+- [Run Locally](#run-locally)
 - [👯 Collaborators](#collaborators)
 - [📍 Prototype Disclaimer](#prototype-disclaimer)
 
