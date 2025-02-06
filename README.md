@@ -1,8 +1,8 @@
-DFA-Based Approach for Skill Matching in Resume Screening
+# DFA-Based Approach for Skill Matching in Resume Screening
 
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/) [![Streamlit](https://img.shields.io/badge/streamlit-0.84.0-blue)](https://streamlit.io/)
 
-Table of Contents
+## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
 - [Screenshots](#screenshots)
