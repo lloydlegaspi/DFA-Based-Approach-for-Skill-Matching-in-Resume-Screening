@@ -2,4 +2,3 @@
 ## support pdf file and gui features (soon)
 
 PyPDF2
-tkinter
