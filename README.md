@@ -7,12 +7,12 @@ This project is a prototype for the research paper titled "A DFA-Based Approach 
 The goal of this prototype is to visualize and demonstrate the practical application of DFA in resume screening, particularly for identifying and matching skills in resumes with job requirements. While this prototype serves as a guide, any lapses or limitations can be improved upon in future iterations.
 
 ## 📑 Table of Contents 
-- [🧩 Features](#features)
-- [📸 Screenshots](#screenshots)
-- [⚙️ Installation](#installation)
-- [🖥️ Run Locally](#run-locally)
-- [👯 Collaborators](#collaborators)
-- [📍 Prototype Disclaimer](#prototype-disclaimer)
+- [🧩 Features](#-features)
+- [📸 Screenshots](#-screenshots)
+- [⚙️ Installation](#-installation)
+- [🖥️ Run Locally](#-run-locally)
+- [👯 Collaborators](#-collaborators)
+- [📍 Prototype Disclaimer](#-prototype-disclaimer)
 
 ## 🧩 Features
 - **File Upload:** Handles PDF file uploads, including multiple uploads.
