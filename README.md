@@ -20,7 +20,7 @@ The goal of this prototype is to visualize and demonstrate the practical applica
 To set up the project, please follow these steps:
 1. Clone the repository:
    ```bash
-   git clone https://github.com/lloydlegaspi/your-repo.git
+   git clone https://github.com/lloydlegaspi/DFA-Based-Approach-for-Skill-Matching-in-Resume-Screening.git
    cd your-repo
    ```
 2. Install the required dependencies:
