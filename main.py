@@ -142,4 +142,3 @@ if st.button("Match Skills"):
 # Footer
 st.markdown("---")
 st.markdown("**Instructions:** Make sure to enter all required skills separated by commas.")
-st.markdown("**Contact:** pahirapcpiamonte@gmail.com")
